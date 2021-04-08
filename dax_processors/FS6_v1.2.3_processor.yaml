@@ -1,0 +1,64 @@
+---
+moreauto: true
+inputs:
+  default:
+    container_path: FS6_v1.2.3.simg
+    container_source: shub://bud42/FS6:v1.2.3
+    extraflags: ""
+  xnat:
+    scans:
+      - name: scan_t1
+        types: 3D T1,T1,MPRAGE,T1_MPRAGE,Improved 3D,T1W/3D/TFE
+        needs_qc: True
+        resources:
+          - resource: NIFTI
+            varname: t1_nifti
+            fmatch: '*'
+            fcount: 1
+            fdest: T1.nii.gz
+            ftype: FILE
+    edits:
+      - fpref: brainmask.edited.mgz
+        varname: brainmask
+      - fpref: control.dat
+        varname: control
+      - fpref: wm.edited.mgz
+        varname: wm
+      - fpref: aseg.edited.mgz
+        varname: aseg
+outputs:
+  - path: OUT/stats.txt
+    type: FILE
+    resource: STATS
+  - path: OUT/report.pdf
+    type: FILE
+    resource: PDF
+  - path: OUT/Subjects/*
+    type: DIR
+    resource: DATA
+  - path: OUT/SCRIPT/script.sh
+    type: FILE
+    resource: SCRIPT
+command: >-
+  singularity
+  run
+  --bind /data/mcr/centos7/FS6/license.txt:/opt/license.txt
+  --bind $INDIR:/INPUTS
+  --bind $OUTDIR:/OUTPUTS
+  {container_path}
+  --skipfinish
+  --t1_nifti /INPUTS/{t1_nifti}
+  --brainmask '{brainmask}'
+  --control '{control}'
+  --wm '{wm}'
+  --aseg '{aseg}'
+  -d /OUTPUTS/OUT
+  -a {assessor}
+  --extraflags '{extraflags}'
+attrs:
+  xsitype: proc:genProcData
+  walltime: '36:00:00'
+  memory: 8192
+  ppn: 1
+jobtemplate: job_template.txt
+
