@@ -8,7 +8,7 @@ inputs:
   xnat:
     scans:
       - name: scan_t1
-        types: 3D T1,T1,MPRAGE,T1_MPRAGE,Improved 3D,T1W/3D/TFE
+        types: 3D T1,T1,MPRAGE,T1_MPRAGE,Improved 3D,T1W/3D/TFE,ABCD_T1W3D
         needs_qc: True
         resources:
           - resource: NIFTI

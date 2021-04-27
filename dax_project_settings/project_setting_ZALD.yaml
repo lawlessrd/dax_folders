@@ -1,0 +1,22 @@
+processorlib: /home/kanakap/dax_processors
+modulelib: /data/mcr/centos7/dax_modules
+singularity_imagedir: /scratch/kanakap/singularity
+attrs:
+  queue_limit: 1000
+  job_email: praitayini.kanakaraj@vanderbilt.edu
+  job_email_options: FAIL
+  xnat_host: http://129.59.135.143:8080/xnat
+  skip_lastupdate: Y
+
+yamlprocessors:
+# ZALD_TTS
+  - name: test_fmriprep_v1.5.9_processor_ZALD
+    filepath: test_fmriprep_v1.5.9_processor_ZALD.yaml
+  - name: mriqc_v1_processor_ZALD
+    filepath: mriqc_v1_processor_ZALD.yaml
+#
+#
+projects:
+# ZALD_TTS
+  - project: ZALD_TTS
+    yamlprocessors: mriqc_v1_processor_ZALD,test_fmriprep_v1.5.9_processor_ZALD

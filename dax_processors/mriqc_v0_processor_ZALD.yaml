@@ -1,0 +1,51 @@
+moreauto: true
+procname: mriqc
+procversion: 0.15.2
+inputs:
+  default:
+    container_path: mriqc_v0.15.2.simg
+  xnat:
+    scans:
+      - name: scan_t1
+        types: T1
+        resources:
+          - resource: NIFTI
+            fmatch: '*nii.gz'
+            fcount: 1
+            fdest: T1.nii.gz
+            ftype: FILE
+            varname: t1_file
+      - name: scan_fmri
+        types: fMRI 
+        resources:
+          - resource: NIFTI
+            fmatch: '*nii.gz'
+            fcount: 1
+            fdest: fmri.nii.gz
+            ftype: FILE
+            varname: fmri_file
+outputs:
+  - path: $OUTDIR
+    type: DIR
+    resource: mriqc_OUTPUTS
+
+command: >-
+  singularity 
+  run 
+  --cleanenv 
+  --bind $INDIR:/INPUTS
+  --bind $OUTDIR:/OUTPUTS
+  {container_path}  
+  --participant_label 01 
+  --no-sub
+  -w $JOBDIR/WORK
+  /INPUTS/BIDS_DATA 
+  /OUTPUTS
+  participant
+
+attrs:
+  xsitype: proc:genProcData
+  walltime: "72:00:00"
+  memory: 16384
+  ppn: 1
+jobtemplate: job_template.txt

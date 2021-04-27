@@ -142,7 +142,16 @@ mkdir -p $DSTDIR/PDF
 RESDIR=${DSTDIR%/*}
 TEXTFILE=$RESDIR/DISKQ/OUTLOG/$(cut -d'/' -f5 <<<"$DSTDIR").txt
 PDFFILE=$DSTDIR/PDF/$(cut -d'/' -f5 <<<"$DSTDIR").pdf
-python -c 'from fpdf import FPDF; pdf = FPDF(); pdf.add_page(); pdf.set_font("Courier", size = 9); 
+python -c 'from fpdf import FPDF; pdf = FPDF(); pdf.add_page();
+fpdf.set_global("SYSTEM_TTFONTS", os.path.join(os.path.dirname(__file__),'fonts'))
+ 
+pdf.add_font("NotoSans", style="", fname="NotoSans-Regular.ttf", uni=True)
+pdf.add_font("NotoSans", style="B", fname="NotoSans-Bold.ttf", uni=True)
+pdf.add_font("NotoSans", style="I", fname="NotoSans-Italic.ttf", uni=True)
+pdf.add_font("NotoSans", style="BI", fname="NotoSans-BoldItalic.ttf", uni=True)
+
+pdf.set_font("NotoSans", size=9)
+
 f = open("'$TEXTFILE'", "r"); 
 for x in f:
 	pdf.multi_cell(193, 5, txt = x); 
